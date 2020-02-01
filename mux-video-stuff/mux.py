@@ -35,3 +35,4 @@ if create_asset_response.data.status != 'ready':
         else:
             print("Asset Ready! Playback URL: https://stream.mux.com/" + asset_response.data.playback_ids[0].id + ".m3u8")
             break
+#<video src="https://stream.mux.com/aKtR8TnFzymKtXMV8OlK6r8ZXj8ykM67.m3u8">
