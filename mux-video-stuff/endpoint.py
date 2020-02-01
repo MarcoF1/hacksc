@@ -1,6 +1,6 @@
 import flask
 import os
-
+from mux import EmotionalVideos
 
 app = flask.Flask(__name__)
 
@@ -12,10 +12,7 @@ def return_video():
     if flask.request.method == "POST":
         try:
             text = flask.request.args['text']
-            #do something to go from text to video
-
-
-            video = 'https://stream.mux.com/FXRjTHA015GdymQokn5XjcVzOvCY00ul9V.m3u8'
+            video = EmotionalVideos(text).create_video_link()
             return video
 
         except Exception as e:
