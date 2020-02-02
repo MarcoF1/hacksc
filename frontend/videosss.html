@@ -1,6 +1,15 @@
 <html>
     <head>
-        <title>Testing 123</title>
+        <title>Video Player</title>
+        <meta charset="UTF-8" />
+        <link
+        href="https://unpkg.com/video.js@7/dist/video-js.min.css"
+        rel="stylesheet"
+      />
+      <link
+        href="https://unpkg.com/@videojs/themes@1/dist/city/index.css"
+        rel="stylesheet"
+      />
         <link href="videosss.css" rel="stylesheet" type="text/css">
     </head>
     <body>
@@ -22,7 +31,20 @@
         <div class="hero">
             <h1> Sorry to hear you're not doing too well. <br> Here is a video that we hope will cheer you up.  </h1>
         </div>
-        
+        <center>
+        <video
+        width="500"
+        controls
+        id="player"
+        class="video-js vjs-theme-city"
+        >
+        <source src="https://stream.mux.com/RmoAuSkaDkKHpNEIO00s01hWJPg7qmlpHY.m3u8"></source>
+        </video>
+        <script src="https://vjs.zencdn.net/7.5.5/video.js"></script>
+        <script>
+        videojs("player");
+        </script>
+        </center>
     </header>
     </body>
 </html>

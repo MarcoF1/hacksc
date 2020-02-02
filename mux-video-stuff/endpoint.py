@@ -14,9 +14,9 @@ def return_video():
         text = flask.request.args['text']
         video = EmotionalVideos(text).create_video_link()
         if video == "Glad to see that you're doing fine":
-            return flask.render_template('congrats.html', title='Home')
+            return flask.render_template('frontend/congrats.html', title='Home')
         else:
-            return video
+            return flask.render_template('frontend/videosss.html', link=video)
 
         #except Exception as e:
         #    return 'oops... something happened'
