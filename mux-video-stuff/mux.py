@@ -7,6 +7,7 @@ from nltk.tokenize import word_tokenize
 from sentiment import remove_noise
 import random
 
+
 class EmotionalVideos:
 
     def __init__(self, category):
