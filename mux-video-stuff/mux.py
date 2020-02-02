@@ -2,7 +2,10 @@ import os
 import time
 import mux_python
 from mux_python.rest import ApiException
-
+import joblib
+from nltk.tokenize import word_tokenize
+from sentiment import remove_noise
+import random
 
 class EmotionalVideos:
 
@@ -22,6 +25,8 @@ class EmotionalVideos:
                         'sleep': [self.sleep]
                         }
 
+        self.list_videos = [self.happy, self.happy2, self.nervous]
+
         self.category = category
 
     def setup(self):
@@ -36,8 +41,15 @@ class EmotionalVideos:
         # API Client Initialization
         self.assets_api = mux_python.AssetsApi(mux_python.ApiClient(self.configuration))
 
-    def choose_video(self):
-        self.video = self.library['nervous'][0]
+    def analyze_sentiment(self):
+        classifier = joblib.load('sentiment.pkl')
+
+        tokens = remove_noise(word_tokenize(self.category))
+
+        self.classification = classifier.classify(dict([token, True] for token in tokens))
+
+        self.video = random.choice(self.list_videos)
+
 
     def create_asset(self):
         # Create an asset
@@ -49,25 +61,28 @@ class EmotionalVideos:
         #print("Created Asset ID: " + self.create_asset_response.data.id)
 
     def create_video_link(self):
-        self.setup()
-        self.choose_video()
-        self.create_asset()
+        self.analyze_sentiment()
+        if self.classification == 'Negative':
+            self.setup()
+            self.create_asset()
 
-        # Wait for the asset to become ready, and then print its playback URL
-        if self.create_asset_response.data.status != 'ready':
-            #print("Waiting for asset to become ready...")
-            while True:
-                self.asset_response = self.assets_api.get_asset(self.create_asset_response.data.id)
-                if self.asset_response.data.status != 'ready':
-                    #print("Asset still not ready. Status was: " + self.asset_response.data.status)
-                    time.sleep(1)
-                else:
-                    #print("Asset Ready! Playback URL: https://stream.mux.com/" + self.asset_response.data.playback_ids[0].id + ".m3u8")
-                    return 'https://stream.mux.com/' + self.asset_response.data.playback_ids[0].id + ".m3u8"
+            # Wait for the asset to become ready, and then print its playback URL
+            if self.create_asset_response.data.status != 'ready':
+                #print("Waiting for asset to become ready...")
+                while True:
+                    self.asset_response = self.assets_api.get_asset(self.create_asset_response.data.id)
+                    if self.asset_response.data.status != 'ready':
+                        pass
+                        #print("Asset still not ready. Status was: " + self.asset_response.data.status)
+                    else:
+                        #print("Asset Ready! Playback URL: https://stream.mux.com/" + self.asset_response.data.playback_ids[0].id + ".m3u8")
+                        return 'https://stream.mux.com/' + self.asset_response.data.playback_ids[0].id + ".m3u8"
+        else:
+            return "Glad to see that you're doing fine"
 
 
 if __name__ == '__main__':
-    x = EmotionalVideos('aaaa')
+    x = EmotionalVideos('i got married but my mom died')
     print(x.create_video_link())
 
 

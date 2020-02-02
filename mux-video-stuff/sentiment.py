@@ -1,6 +1,4 @@
-
 from nltk.stem.wordnet import WordNetLemmatizer
-
 from nltk.corpus import twitter_samples
 from nltk import NaiveBayesClassifier
 from nltk.corpus import stopwords
@@ -11,12 +9,12 @@ import re, string
 import random
 
 
-
 positive_tweets = twitter_samples.strings('positive_tweets.json')
 negative_tweets = twitter_samples.strings('negative_tweets.json')
 text = twitter_samples.strings('tweets.20150430-223406.json')
 
 tweet_tokens = twitter_samples.tokenized('positive_tweets.json')[0]
+
 
 def lemmatize_sentence(tokens):
     lemmatizer = WordNetLemmatizer()
@@ -71,8 +69,8 @@ for tokens in positive_tweet_tokens:
 for tokens in negative_tweet_tokens:
     negative_cleaned_tokens_list.append(remove_noise(tokens, stop_words))
 
-print(positive_tweet_tokens[500])
-print(positive_cleaned_tokens_list[500])
+#print(positive_tweet_tokens[500])
+#print(positive_cleaned_tokens_list[500])
 
 
 
@@ -86,7 +84,7 @@ all_pos_words = get_all_words(positive_cleaned_tokens_list)
 
 
 freq_dist_pos = FreqDist(all_pos_words)
-print(freq_dist_pos.most_common(10))
+#print(freq_dist_pos.most_common(10))
 
 
 def get_tweets_for_model(cleaned_tokens_list):
@@ -116,11 +114,12 @@ test_data = dataset[7000:]
 
 classifier = NaiveBayesClassifier.train(train_data)
 
-print("Accuracy is:", classify.accuracy(classifier, test_data))
+#print("Accuracy is:", classify.accuracy(classifier, test_data))
 
-print(classifier.show_most_informative_features(10))
+#print(classifier.show_most_informative_features(10))
 
-
+import joblib
+joblib.dump(classifier, 'sentiment.pkl', compress=9)
 
 '''
 from nltk.tokenize import word_tokenize
