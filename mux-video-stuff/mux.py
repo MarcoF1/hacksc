@@ -59,10 +59,8 @@ class EmotionalVideos:
             self.classification = classifier.classify(dict([token, True] for token in tokens))
             self.video = random.choice(self.list_videos)
 
-
     def create_asset(self):
         # Create an asset
-
         self.input_settings = [mux_python.InputSettings(url=self.video)]
         self.create_asset_request = mux_python.CreateAssetRequest(input=self.input_settings, playback_policy=[mux_python.PlaybackPolicy.PUBLIC], mp4_support="standard")
 
