@@ -4,12 +4,12 @@ from mux import EmotionalVideos
 
 app = flask.Flask(__name__)
 
-@app.route("/video", methods=['POST'])
+@app.route("/video", methods=['GET'])
 def return_video():
     """
     Endpoint for video playback
     """
-    if flask.request.method == "POST":
+    if flask.request.method == "GET":
         try:
             text = flask.request.args['text']
             video = EmotionalVideos(text).create_video_link()
